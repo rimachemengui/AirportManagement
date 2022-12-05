@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mail;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,12 +11,33 @@ namespace AM.Core.Domain
 {
     public class Passenger
     {
+
+        [DataType(DataType.DateTime,ErrorMessage ="DateTime") ]
+        [Display(Name ="date of birth")]
         public DateTime BirthDate { get; set; }
+
+        [Key]
+        [MaxLength(7,ErrorMessage ="MaxLenght is 7")]
+        [MinLength(7, ErrorMessage = "MinLenght is 7")]
+
         public string PassportNumber { get; set; }
+
+        [DataType(DataType.EmailAddress,ErrorMessage ="Email Adress")] 
+        
+        //[EmailAddress]
         public string EmailAddress { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+
+        //[MaxLength(25,ErrorMessage ="Max length is 25"),
+        // [MinLength (3,ErrorMessage ="Min length is 3")]
+        // public string FirstName { get; set; }
+        //public string LastName { get; set; }
+
+        public FullName MyFullName { get; set; }
+
+        [DataType(DataType.PhoneNumber,ErrorMessage ="phone Number")]
+        //[Phone]
         public string TelNumber { get; set; }
+        //public int Id { get; set; }
 
         //Question 14
         public int Age
@@ -31,7 +54,8 @@ namespace AM.Core.Domain
                 return age;
             }
         }
-        public ICollection<Flight> Flights { get; set; }
+        //public ICollection<Flight> Flights { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; set; }
 
         public Passenger()
         {
@@ -43,10 +67,10 @@ namespace AM.Core.Domain
             BirthDate = birthDate;
             PassportNumber = passportNumber;
             EmailAddress = emailAddress;
-            FirstName = firstName;
-            LastName = lastName;
+            MyFullName.FirstName = firstName;
+            MyFullName.LastName = lastName;
             TelNumber = telNumber;
-            Flights = flights;
+            //Flights = flights;
         }
 
 
@@ -74,8 +98,8 @@ namespace AM.Core.Domain
             //    && LastName == lastname
             //    && EmailAddress == emailaddress;
 
-            return FirstName == firstname
-                && LastName == lastname
+            return MyFullName.FirstName == firstname
+                && MyFullName.LastName == lastname
                 && (emailaddress == null || EmailAddress == emailaddress);
         }
 
@@ -111,8 +135,8 @@ namespace AM.Core.Domain
             return "BirthDate:"+BirthDate+
                 ", PassportNumber: "+ PassportNumber+
                 ", EmailAddress: "+ EmailAddress+
-                ", FirstName: "+ FirstName+
-                ", LastName: "+ LastName+
+                ", FirstName: "+ MyFullName.FirstName +
+                ", LastName: "+ MyFullName.LastName +
                 ", TelNumber: "+ TelNumber;
         }
     }

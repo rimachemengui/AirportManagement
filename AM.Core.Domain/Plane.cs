@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,12 +13,13 @@ namespace AM.Core.Domain
     }
     public class Plane
     {
+        [Range(0, int.MaxValue,ErrorMessage ="positive integer")]
         public int Capacity { get; set; }
         public DateTime ManifactureDate { get; set; }
         public int PlaneId { get; set; }
         public PlaneType MyPlaneType { get; set; }
 
-        public ICollection<Flight> Flights { get; set; }
+        public virtual ICollection<Flight> Flights { get; set; }
 
         public Plane()
         {
